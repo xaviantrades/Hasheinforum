@@ -1,749 +1,257 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Hashein · WhatsApp Channel</title>
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
-
-  html,body{height:100%}
-
-  body{
-    font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
-    background:
-      radial-gradient(900px 600px at 15% 0%, #1c2430 0%, transparent 60%),
-      radial-gradient(900px 600px at 90% 100%, #16202b 0%, transparent 60%),
-      #0b0f14;
-    display:grid;
-    place-items:center;
-    padding:24px 12px;
-    -webkit-font-smoothing:antialiased;
-  }
-
-  /* ===================== PHONE FRAME ===================== */
-  .phone{
-    /* ---- light theme tokens ---- */
-    --bg:#efeae2;
-    --panel:#f0f2f5;
-    --panel-solid:#ffffff;
-    --bubble:#ffffff;
-    --text:#111b21;
-    --sub:#667781;
-    --line:#e4e7ea;
-    --accent:#00a884;
-    --input-bg:#f0f2f5;
-    --chip-bg:#ffffff;
-    --doodle:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.055' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='26' r='9'/%3E%3Cpath d='M66 14l13 22H53z'/%3E%3Crect x='108' y='18' width='19' height='19' rx='5'/%3E%3Cpath d='M14 100q15-17 30 0'/%3E%3Ccircle cx='84' cy='104' r='8'/%3E%3Cpath d='M118 76v26M105 89h26'/%3E%3Cpath d='M34 62h22M45 51v22'/%3E%3Ccircle cx='122' cy='118' r='6'/%3E%3Cpath d='M8 30h14M15 23v14'/%3E%3C/g%3E%3C/svg%3E");
-
-    width:min(420px,100vw);
-    height:min(880px,calc(100vh - 48px));
-    border-radius:40px;
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-    position:relative;
-    background:var(--bg);
-    box-shadow:
-      0 40px 90px -30px rgba(0,0,0,.9),
-      0 0 0 10px #14181e,
-      0 0 0 11px #2c333d,
-      0 0 0 12px #0a0d11;
-  }
-
-  .phone.dark{
-    --bg:#0b141a;
-    --panel:#202c33;
-    --panel-solid:#202c33;
-    --bubble:#202c33;
-    --text:#e9edef;
-    --sub:#8696a0;
-    --line:#2a3942;
-    --accent:#00a884;
-    --input-bg:#2a3942;
-    --chip-bg:#182229;
-    --doodle:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.045' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='26' r='9'/%3E%3Cpath d='M66 14l13 22H53z'/%3E%3Crect x='108' y='18' width='19' height='19' rx='5'/%3E%3Cpath d='M14 100q15-17 30 0'/%3E%3Ccircle cx='84' cy='104' r='8'/%3E%3Cpath d='M118 76v26M105 89h26'/%3E%3Cpath d='M34 62h22M45 51v22'/%3E%3Ccircle cx='122' cy='118' r='6'/%3E%3Cpath d='M8 30h14M15 23v14'/%3E%3C/g%3E%3C/svg%3E");
-  }
-
-  /* ===================== STATUS BAR ===================== */
-  .status{
-    height:30px;
-    flex:none;
-    background:var(--panel);
-    color:var(--text);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 22px 0 26px;
-    font-size:13px;
-    font-weight:600;
-    letter-spacing:.2px;
-    position:relative;
-    z-index:5;
-  }
-  .status .sicons{display:flex;align-items:center;gap:6px;opacity:.9}
-  .status .sicons svg{display:block}
-
-  /* ===================== HEADER ===================== */
-  .ch-head{
-    flex:none;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:8px 8px 8px 6px;
-    background:var(--panel);
-    border-bottom:1px solid var(--line);
-    position:relative;
-    z-index:5;
-  }
-
-  .icon-btn{
-    width:38px;height:38px;flex:none;
-    display:grid;place-items:center;
-    background:transparent;border:none;border-radius:50%;
-    color:var(--text);cursor:pointer;
-    transition:background .15s;
-  }
-  .icon-btn:hover{background:rgba(128,128,128,.15)}
-  .icon-btn:active{background:rgba(128,128,128,.25)}
-
-  .ch-avatar{
-    width:40px;height:40px;flex:none;border-radius:50%;
-    background:linear-gradient(135deg,#00a884,#0a7d63 60%,#005e4d);
-    display:grid;place-items:center;
-    color:#fff;font-weight:800;font-size:18px;
-    letter-spacing:-.5px;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);
-  }
-
-  .ch-info{flex:1;min-width:0;line-height:1.25}
-  .ch-name{
-    font-size:16px;font-weight:600;color:var(--text);
-    display:flex;align-items:center;gap:5px;
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  }
-  .ch-sub{font-size:12.5px;color:var(--sub);margin-top:1px}
-
-  /* ===================== CHAT AREA ===================== */
-  .chat{
-    flex:1;
-    min-height:0;
-    overflow-y:auto;
-    overflow-x:hidden;
-    padding:14px 12px 8px;
-    background-color:var(--bg);
-    background-image:var(--doodle);
-    background-size:150px 150px;
-    scroll-behavior:smooth;
-  }
-  .chat::-webkit-scrollbar{width:6px}
-  .chat::-webkit-scrollbar-thumb{background:rgba(128,128,128,.35);border-radius:10px}
-  .chat::-webkit-scrollbar-track{background:transparent}
-
-  /* system chips */
-  .sys-chip{
-    width:fit-content;max-width:92%;
-    margin:0 auto 16px;
-    background:var(--chip-bg);
-    color:var(--sub);
-    font-size:12px;
-    line-height:1.45;
-    text-align:center;
-    padding:7px 14px;
-    border-radius:10px;
-    box-shadow:0 1px 1px rgba(11,20,26,.10);
-  }
-
-  .day-chip{
-    width:fit-content;
-    margin:2px auto 14px;
-    background:var(--chip-bg);
-    color:var(--sub);
-    font-size:11.5px;
-    font-weight:600;
-    letter-spacing:.6px;
-    text-transform:uppercase;
-    padding:5px 13px;
-    border-radius:8px;
-    box-shadow:0 1px 1px rgba(11,20,26,.10);
-  }
-
-  /* ---------- message ---------- */
-  .msg{
-    display:flex;
-    margin-bottom:24px;
-    animation:pop .3s cubic-bezier(.2,.8,.3,1) both;
-  }
-  @keyframes pop{
-    from{opacity:0;transform:translateY(10px) scale(.985)}
-    to{opacity:1;transform:none}
-  }
-  .msg:nth-child(3){animation-delay:.04s}
-  .msg:nth-child(4){animation-delay:.08s}
-  .msg:nth-child(5){animation-delay:.12s}
-  .msg:nth-child(6){animation-delay:.16s}
-  .msg:nth-child(7){animation-delay:.20s}
-  .msg:nth-child(8){animation-delay:.24s}
-
-  .bubble{
-    position:relative;
-    max-width:84%;
-    background:var(--bubble);
-    color:var(--text);
-    border-radius:12px 12px 12px 12px;
-    border-top-left-radius:4px;
-    padding:8px 10px 6px;
-    font-size:14.6px;
-    line-height:1.44;
-    box-shadow:0 1px .5px rgba(11,20,26,.13);
-    word-wrap:break-word;
-  }
-
-  .bubble-text{
-    white-space:pre-wrap;
-    word-break:break-word;
-  }
-
-  /* image post */
-  .img-ph{
-    height:158px;
-    margin:-8px -10px 8px;
-    border-radius:4px 12px 0 0;
-    position:relative;
-    overflow:hidden;
-    display:grid;
-    place-items:center;
-  }
-  .img-ph::after{
-    content:"";
-    position:absolute;inset:0;
-    background:
-      radial-gradient(circle at 20% 20%, rgba(255,255,255,.35), transparent 45%),
-      radial-gradient(circle at 80% 90%, rgba(255,255,255,.18), transparent 50%);
-  }
-  .img-ph .wordmark{
-    position:relative;
-    z-index:1;
-    font-size:26px;font-weight:800;letter-spacing:-1px;
-    color:#fff;
-    text-shadow:0 3px 22px rgba(0,0,0,.35);
-  }
-  .img-ph .wordmark small{
-    display:block;font-size:10px;font-weight:600;
-    letter-spacing:3px;text-transform:uppercase;
-    opacity:.8;margin-top:2px;text-align:center;
-  }
-
-  /* poll */
-  .poll{margin:4px 0 2px;display:flex;flex-direction:column;gap:6px}
-  .poll-q{font-weight:600;margin-bottom:3px;font-size:14.5px}
-  .poll-opt{
-    position:relative;
-    border:1px solid var(--line);
-    border-radius:9px;
-    padding:8px 10px;
-    overflow:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    font-size:13.5px;
-  }
-  .poll-opt .fill{
-    position:absolute;left:0;top:0;bottom:0;
-    background:rgba(0,168,132,.18);
-    border-radius:8px 0 0 8px;
-  }
-  .poll-opt .lbl{position:relative;z-index:1}
-  .poll-opt .pct{position:relative;z-index:1;color:var(--sub);font-weight:700;font-size:12.5px}
-  .poll-total{font-size:11.5px;color:var(--sub);margin-top:2px}
-
-  /* link card */
-  .link-card{
-    margin-top:8px;
-    border:1px solid var(--line);
-    border-radius:10px;
-    overflow:hidden;
-    background:rgba(128,128,128,.06);
-  }
-  .link-bar{height:4px}
-  .link-body{padding:9px 11px}
-  .link-title{font-size:13.5px;font-weight:600;line-height:1.35}
-  .link-url{font-size:11.5px;color:var(--accent);margin-top:3px}
-
-  /* meta */
-  .meta{
-    display:flex;
-    align-items:center;
-    justify-content:flex-end;
-    gap:5px;
-    font-size:11px;
-    color:var(--sub);
-    margin-top:4px;
-    padding-left:34px;
-  }
-  .meta .views{display:inline-flex;align-items:center;gap:3px}
-  .meta svg{opacity:.75}
-
-  /* ---------- reactions ---------- */
-  .reactions{
-    position:absolute;
-    left:6px;
-    bottom:-15px;
-    display:flex;
-    gap:4px;
-    z-index:2;
-  }
-
-  .rx{
-    position:relative;
-    display:inline-flex;
-    align-items:center;
-    gap:4px;
-    background:var(--panel-solid);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:3px 8px 3px 6px;
-    font-size:12px;
-    font-weight:600;
-    font-family:inherit;
-    color:var(--sub);
-    cursor:pointer;
-    box-shadow:0 1px 2px rgba(11,20,26,.16);
-    transition:transform .13s ease, background .16s, border-color .16s, color .16s;
-    white-space:nowrap;
-  }
-  .rx:hover{transform:translateY(-2px)}
-  .rx:active{transform:scale(.94)}
-  .rx .rx-emoji{font-size:13.5px;line-height:1}
-  .rx.mine{
-    background:rgba(0,168,132,.16);
-    border-color:rgba(0,168,132,.55);
-    color:var(--accent);
-  }
-
-  /* tooltip of who reacted */
-  .rx::after{
-    content:attr(data-users);
-    position:absolute;
-    bottom:calc(100% + 8px);
-    left:0;
-    background:#111b21;
-    color:#e9edef;
-    font-size:11px;
-    font-weight:500;
-    padding:5px 9px;
-    border-radius:8px;
-    white-space:nowrap;
-    opacity:0;
-    transform:translateY(4px);
-    pointer-events:none;
-    transition:opacity .16s, transform .16s;
-    box-shadow:0 6px 18px -6px rgba(0,0,0,.7);
-    z-index:30;
-  }
-  .rx:hover::after{opacity:1;transform:translateY(0)}
-
-  /* ===================== FOOTER ===================== */
-  .footer{
-    flex:none;
-    background:var(--panel);
-    border-top:1px solid var(--line);
-    padding:6px 10px 10px;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    position:relative;
-    z-index:5;
-  }
-
-  .emoji-strip{
-    display:flex;
-    gap:2px;
-    justify-content:space-between;
-  }
-  .emoji-strip button{
-    flex:1;
-    background:transparent;
-    border:none;
-    font-size:21px;
-    line-height:1;
-    padding:7px 0;
-    border-radius:10px;
-    cursor:pointer;
-    transition:background .15s, transform .12s;
-  }
-  .emoji-strip button:hover{background:rgba(128,128,128,.15);transform:scale(1.15)}
-  .emoji-strip button:active{transform:scale(.9)}
-
-  .reply-disabled{
-    display:flex;
-    align-items:center;
-    gap:9px;
-    background:var(--input-bg);
-    border-radius:22px;
-    padding:11px 15px;
-    color:var(--sub);
-    font-size:13.5px;
-    user-select:none;
-  }
-  .reply-disabled svg{flex:none;opacity:.7}
-
-  /* ===================== THEME TOGGLE ===================== */
-  .theme-btn{
-    position:fixed;
-    top:22px;right:22px;
-    width:44px;height:44px;
-    border-radius:50%;
-    border:1px solid rgba(255,255,255,.14);
-    background:rgba(255,255,255,.07);
-    color:#e6edf3;
-    font-size:18px;
-    cursor:pointer;
-    display:grid;place-items:center;
-    backdrop-filter:blur(10px);
-    transition:background .18s, transform .18s;
-    z-index:100;
-  }
-  .theme-btn:hover{background:rgba(255,255,255,.16);transform:scale(1.06)}
-
-  /* ===================== RESPONSIVE ===================== */
-  @media (max-width:520px){
-    body{padding:0;display:block;background:#000}
-    .phone{
-      width:100%;
-      height:100vh;
-      height:100dvh;
-      border-radius:0;
-      box-shadow:none;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Open WhatsApp</title>
+  <meta name="description" content="Open WhatsApp or download WhatsApp for mobile or desktop.">
+  <style>
+    :root {
+      --green: #25d366;
+      --dark: #111b21;
+      --text: #1c1e21;
+      --muted: #5e5e5e;
+      --footer-border: #33463f;
     }
-    .theme-btn{display:none}
-    .status{padding-left:18px;padding-right:18px}
-  }
-  @media (max-height:700px) and (min-width:521px){
-    .phone{height:calc(100vh - 24px)}
-    body{padding:12px}
-  }
-</style>
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: #fff;
+      line-height: 1.4;
+    }
+
+    a { color: #385898; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .logo svg { width: 34px; height: 34px; }
+
+    .btn {
+      display: inline-block;
+      background: var(--green);
+      color: #fff;
+      border-radius: 999px;
+      padding: 14px 28px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--dark);
+      text-decoration: none;
+    }
+
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 24px 40px;
+      text-align: center;
+    }
+
+    .main h1 {
+      margin: 0 0 24px;
+      font-size: 42px;
+      font-weight: 400;
+    }
+
+    .main hr {
+      border: 0;
+      border-top: 1px solid #ddd;
+      margin: 32px 0;
+    }
+
+    .download-note {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 26px;
+      margin-top: 45px;
+    }
+
+    footer {
+      background: var(--dark);
+      color: #fff;
+      padding: 48px 24px 24px;
+    }
+
+    .footer-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 32px;
+    }
+
+    .footer-col h4 {
+      margin: 0 0 14px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .footer-col li { margin: 0 0 10px; }
+
+    .footer-col a {
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 40px auto 0;
+      padding-top: 20px;
+      border-top: 1px solid var(--footer-border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #ddd;
+    }
+
+    .footer-bottom a { color: #fff; }
+
+    .social {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .main { padding-top: 48px; }
+      .main h1 { font-size: 32px; }
+      .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 480px) {
+      .header-inner { padding: 12px 16px; }
+      .logo { font-size: 20px; }
+      .main h1 { font-size: 28px; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-
-<button class="theme-btn" id="themeBtn" title="Toggle theme">🌙</button>
-
-<div class="phone" id="phone">
-
-  <!-- ============ STATUS BAR ============ -->
-  <div class="status">
-    <span>9:41</span>
-    <div class="sicons">
-      <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor">
-        <rect x="0" y="7.5" width="3" height="3.5" rx="1"/>
-        <rect x="4.5" y="5" width="3" height="6" rx="1"/>
-        <rect x="9" y="2.5" width="3" height="8.5" rx="1"/>
-        <rect x="13.5" y="0" width="3" height="11" rx="1"/>
-      </svg>
-      <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor">
-        <path d="M8 10.6 5.4 8a3.7 3.7 0 0 1 5.2 0z"/>
-        <path d="M3.3 5.9 1.5 4.1a9.3 9.3 0 0 1 13 0l-1.8 1.8a6.8 6.8 0 0 0-9.4 0z"/>
-      </svg>
-      <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
-        <rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="currentColor" opacity=".45"/>
-        <rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/>
-        <path d="M23 4v4a2.6 2.6 0 0 0 0-4z" fill="currentColor" opacity=".5"/>
-      </svg>
-    </div>
-  </div>
-
-  <!-- ============ HEADER ============ -->
-  <header class="ch-head">
-    <button class="icon-btn" title="Back">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-      </svg>
-    </button>
-
-    <div class="ch-avatar">H</div>
-
-    <div class="ch-info">
-      <div class="ch-name">
-        Hashein
-        <svg width="15" height="15" viewBox="0 0 24 24" aria-label="Verified">
-          <circle cx="12" cy="12" r="12" fill="#25D366"/>
-          <path d="M10.2 16.6 6.2 12.6l1.5-1.5 2.5 2.5 6-6 1.5 1.5z" fill="#fff"/>
+  <header class="header">
+    <div class="header-inner">
+      <a class="logo" href="https://www.whatsapp.com/" aria-label="WhatsApp homepage">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20Zm4.5-5.7c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.1-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.5-1.3-.7-1.8-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.2-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.2-.2-.4-.3Z"/>
         </svg>
-      </div>
-      <div class="ch-sub">12.4M followers</div>
+        <span>WhatsApp</span>
+      </a>
+
+      <a class="btn" href="https://www.whatsapp.com/download">Download</a>
     </div>
-
-    <button class="icon-btn" title="Search">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/>
-      </svg>
-    </button>
-
-    <button class="icon-btn" title="More">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 8a2 2 0 1 0-2-2 2 2 0 0 0 2 2zm0 2a2 2 0 1 0 2 2 2 2 0 0 0-2-2zm0 6a2 2 0 1 0 2 2 2 2 0 0 0-2-2z"/>
-      </svg>
-    </button>
   </header>
 
-  <!-- ============ CHAT ============ -->
-  <main class="chat" id="chat">
-    <div class="sys-chip">🔒 Only admins can post in this channel.<br>You can react to messages, but replies are turned off.</div>
-    <div class="day-chip">Today</div>
+  <main class="main">
+    <h1>Open WhatsApp</h1>
+    <a class="btn" href="https://www.whatsapp.com/download" title="Open WhatsApp">Chat</a>
+    <hr>
+    <p class="download-note">
+      Don't have WhatsApp yet?<br>
+      <a href="https://www.whatsapp.com/download">Download</a>
+    </p>
   </main>
 
-  <!-- ============ FOOTER ============ -->
-  <div class="footer">
-    <div class="emoji-strip" id="emojiStrip">
-      <button data-emoji="👍" title="React 👍">👍</button>
-      <button data-emoji="❤️" title="React ❤️">❤️</button>
-      <button data-emoji="😂" title="React 😂">😂</button>
-      <button data-emoji="😮" title="React 😮">😮</button>
-      <button data-emoji="😢" title="React 😢">😢</button>
-      <button data-emoji="🙏" title="React 🙏">🙏</button>
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>What we do</h4>
+        <ul>
+          <li><a href="https://www.whatsapp.com/calling">Features</a></li>
+          <li><a href="https://blog.whatsapp.com/">Blog</a></li>
+          <li><a href="https://www.whatsapp.com/security">Security</a></li>
+          <li><a href="https://whatsappbusiness.com/" target="_blank" rel="noopener">For Business</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Who we are</h4>
+        <ul>
+          <li><a href="https://www.whatsapp.com/about">About us</a></li>
+          <li><a href="https://www.metacareers.com/jobs?divisions[0]=WhatsApp" target="_blank" rel="noopener">Careers</a></li>
+          <li><a href="https://www.facebook.com/brand/resources/whatsapp/whatsapp-brand" target="_blank" rel="noopener">Brand Center</a></li>
+          <li><a href="https://www.whatsapp.com/privacy">Privacy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Use WhatsApp</h4>
+        <ul>
+          <li><a href="https://www.whatsapp.com/download/mobile">Mobile</a></li>
+          <li><a href="https://www.whatsapp.com/download/desktop">Desktop</a></li>
+          <li><a href="https://www.whatsapp.com/download/tablet">Tablet</a></li>
+          <li><a href="https://web.whatsapp.com/">WhatsApp Web</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Need help?</h4>
+        <ul>
+          <li><a href="https://www.whatsapp.com/contact">Contact Us</a></li>
+          <li><a href="https://faq.whatsapp.com/">Help Center</a></li>
+          <li><a href="https://www.whatsapp.com/download">Apps</a></li>
+          <li><a href="https://www.whatsapp.com/security/advisories">Security Advisories</a></li>
+        </ul>
+      </div>
     </div>
 
-    <div class="reply-disabled">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M18 8h-1V6a5 5 0 0 0-10 0v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2zM9 6a3 3 0 0 1 6 0v2H9zm3 12a2 2 0 1 1 2-2 2 2 0 0 1-2 2z"/>
-      </svg>
-      You can't send messages to this channel
+    <div class="footer-bottom">
+      <span>2026 © WhatsApp LLC</span>
+
+      <span class="social">
+        <a href="https://x.com/whatsapp" target="_blank" rel="noopener">X / Twitter</a>
+        <a href="https://www.youtube.com/channel/UCAuerig2N-RZWJT8x75V9yw" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/whatsapp/?hl=en" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/profile.php?id=100064758844406" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.threads.com/@whatsapp" target="_blank" rel="noopener">Threads</a>
+      </span>
+
+      <span>
+        <a href="https://www.whatsapp.com/legal/">Terms &amp; Privacy Policy</a>
+        &nbsp;·&nbsp;
+        <a href="https://www.whatsapp.com/sitemap">Sitemap</a>
+        &nbsp;·&nbsp;
+        English
+      </span>
     </div>
-  </div>
-
-</div>
-
-<script>
-/* =========================================================
-   Utilities
-   ========================================================= */
-const esc = s => String(s).replace(/[&<>"']/g, c => (
-  {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
-);
-
-function fmt(n){
-  if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
-  if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
-  return String(n);
-}
-
-const EYE = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-  <path d="M12 5C7 5 2.7 8.6 1 12c1.7 3.4 6 7 11 7s9.3-3.6 11-7c-1.7-3.4-6-7-11-7zm0 11.5A4.5 4.5 0 1 1 16.5 12 4.5 4.5 0 0 1 12 16.5zm0-7.2A2.7 2.7 0 1 0 14.7 12 2.7 2.7 0 0 0 12 9.3z"/>
-</svg>`;
-
-/* =========================================================
-   Channel data — posts, dummy users & reactions
-   ========================================================= */
-const POSTS = [
-  {
-    id: 1,
-    time: '09:12',
-    views: 2430000,
-    text: "Welcome to the official Hashein channel 🎉\n\nThis is where we post releases, maintenance windows and behind-the-scenes notes. React to let us know what you think — replies are off, but we read everything.",
-    reactions: [
-      { emoji: '👍', count: 48200, mine: false, users: ['Aria Vance', 'Kai Mercer', 'Nova Lin', '+48.2K others'] },
-      { emoji: '❤️', count: 21400, mine: false, users: ['Dex Ortiz', 'Priya Raman', '+21.4K others'] },
-      { emoji: '🔥', count: 9600,  mine: false, users: ['Tom Becker', '+9.6K others'] }
-    ]
-  },
-  {
-    id: 2,
-    time: '11:47',
-    views: 1180000,
-    text: "Hashein v2.0 is live for everyone.\n\n• Rebuilt forum engine — 4× faster threads\n• Real-time replies & presence indicators\n• Full theming, including dark mode\n• Public API v2 with webhooks",
-    reactions: [
-      { emoji: '🎉', count: 31700, mine: false, users: ['Nova Lin', 'Dex Ortiz', '+31.7K others'] },
-      { emoji: '👍', count: 18900, mine: false, users: ['Kai Mercer', '+18.9K others'] }
-    ]
-  },
-  {
-    id: 3,
-    time: '14:03',
-    views: 640000,
-    text: "A first look at the new theme editor 👀",
-    image: 'linear-gradient(135deg,#7c5cff 0%,#5b8cff 50%,#00d4ff 100%)',
-    reactions: [
-      { emoji: '😮', count: 12400, mine: false, users: ['Priya Raman', 'Tom Becker', '+12.4K others'] },
-      { emoji: '❤️', count: 8900,  mine: false, users: ['Aria Vance', '+8.9K others'] }
-    ]
-  },
-  {
-    id: 4,
-    time: '16:20',
-    views: 402000,
-    poll: {
-      q: 'Which feature should we build next?',
-      options: [
-        { label: 'Theme marketplace', pct: 46 },
-        { label: 'Voice rooms',       pct: 31 },
-        { label: 'Mobile app',        pct: 23 }
-      ],
-      total: '38,412 votes'
-    },
-    reactions: [
-      { emoji: '🤔', count: 5200, mine: false, users: ['Dex Ortiz', '+5.2K others'] }
-    ]
-  },
-  {
-    id: 5,
-    time: '18:55',
-    views: 188000,
-    text: "Scheduled maintenance this Friday, 02:00–04:00 UTC. Expect up to 15 minutes of read-only mode. Full details in the docs.",
-    link: { title: 'Maintenance window — Friday 02:00 UTC', url: 'docs.hashein.app/status', hue: '#00a884' },
-    reactions: [
-      { emoji: '👍', count: 3100, mine: false, users: ['Kai Mercer', '+3.1K others'] }
-    ]
-  }
-];
-
-/* =========================================================
-   Rendering
-   ========================================================= */
-const chat = document.getElementById('chat');
-
-function reactionPills(p){
-  return p.reactions.map((r, i) => `
-    <button class="rx${r.mine ? ' mine' : ''}"
-            data-post="${p.id}"
-            data-i="${i}"
-            data-users="${esc(r.users.join(', '))}">
-      <span class="rx-emoji">${r.emoji}</span><span class="rx-count">${fmt(r.count)}</span>
-    </button>`).join('');
-}
-
-function pollHTML(poll){
-  return `
-    <div class="poll">
-      <div class="poll-q">${esc(poll.q)}</div>
-      ${poll.options.map(o => `
-        <div class="poll-opt">
-          <div class="fill" style="width:${o.pct}%"></div>
-          <span class="lbl">${esc(o.label)}</span>
-          <span class="pct">${o.pct}%</span>
-        </div>`).join('')}
-      <div class="poll-total">${esc(poll.total)}</div>
-    </div>`;
-}
-
-function linkHTML(l){
-  return `
-    <div class="link-card">
-      <div class="link-bar" style="background:${l.hue}"></div>
-      <div class="link-body">
-        <div class="link-title">${esc(l.title)}</div>
-        <div class="link-url">${esc(l.url)}</div>
-      </div>
-    </div>`;
-}
-
-function postHTML(p){
-  return `
-    <div class="msg" data-id="${p.id}">
-      <div class="bubble">
-        ${p.image ? `
-          <div class="img-ph" style="background:${p.image}">
-            <div class="wordmark">Hashein<small>theme editor</small></div>
-          </div>` : ''}
-        ${p.text ? `<div class="bubble-text">${esc(p.text)}</div>` : ''}
-        ${p.poll ? pollHTML(p.poll) : ''}
-        ${p.link ? linkHTML(p.link) : ''}
-        <div class="meta">
-          <span>${p.time}</span>
-          <span class="views">${EYE}${fmt(p.views)}</span>
-        </div>
-        <div class="reactions">${reactionPills(p)}</div>
-      </div>
-    </div>`;
-}
-
-function renderFeed(){
-  const sysChip = chat.querySelector('.sys-chip').outerHTML;
-  const dayChip = chat.querySelector('.day-chip').outerHTML;
-  chat.innerHTML = sysChip + dayChip + POSTS.map(postHTML).join('');
-}
-
-/* =========================================================
-   Reactions
-   ========================================================= */
-function updateReactions(post){
-  const wrap = chat.querySelector(`.msg[data-id="${post.id}"] .reactions`);
-  if (wrap) wrap.innerHTML = reactionPills(post);
-}
-
-function toggleReaction(postId, idx){
-  const post = POSTS.find(p => p.id === postId);
-  if (!post) return;
-  const r = post.reactions[idx];
-  if (!r) return;
-
-  if (r.mine){
-    r.count = Math.max(0, r.count - 1);
-    r.mine = false;
-  } else {
-    r.count += 1;
-    r.mine = true;
-  }
-  updateReactions(post);
-}
-
-/* delegate clicks on reaction pills */
-chat.addEventListener('click', e => {
-  const btn = e.target.closest('.rx');
-  if (!btn) return;
-  toggleReaction(Number(btn.dataset.post), Number(btn.dataset.i));
-});
-
-/* bottom emoji strip → reacts to the newest post */
-document.getElementById('emojiStrip').addEventListener('click', e => {
-  const btn = e.target.closest('button[data-emoji]');
-  if (!btn) return;
-
-  const emoji = btn.dataset.emoji;
-  const post = POSTS[POSTS.length - 1];
-  let r = post.reactions.find(x => x.emoji === emoji);
-
-  if (!r){
-    r = { emoji, count: 0, mine: false, users: ['You'] };
-    post.reactions.push(r);
-  }
-
-  if (r.mine){ r.count = Math.max(0, r.count - 1); r.mine = false; }
-  else { r.count += 1; r.mine = true; }
-
-  updateReactions(post);
-
-  // little pop feedback on the strip button
-  btn.animate(
-    [{ transform: 'scale(1)' }, { transform: 'scale(1.35)' }, { transform: 'scale(1)' }],
-    { duration: 260, easing: 'ease-out' }
-  );
-});
-
-/* =========================================================
-   Theme toggle
-   ========================================================= */
-const phone = document.getElementById('phone');
-const themeBtn = document.getElementById('themeBtn');
-
-themeBtn.addEventListener('click', () => {
-  phone.classList.toggle('dark');
-  const dark = phone.classList.contains('dark');
-  themeBtn.textContent = dark ? '☀️' : '🌙';
-});
-
-/* =========================================================
-   Boot
-   ========================================================= */
-renderFeed();
-
-/* start scrolled to the most recent message, like WhatsApp */
-window.addEventListener('load', () => {
-  chat.scrollTop = chat.scrollHeight;
-});
-setTimeout(() => { chat.scrollTop = chat.scrollHeight; }, 60);
-</script>
+  </footer>
 </body>
 </html>
